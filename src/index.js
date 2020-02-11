@@ -1,7 +1,26 @@
-import CookieBanner from './CookieBanner.vue';
+import component from './cookie-banner.vue';
 
-export default {
-	install(Vue, options) {
-		Vue.component('cookie-banner', CookieBanner);
-	},
+function install(Vue) {
+	if (install.installed) return;
+	install.installed = true;
+	Vue.component("CookieBanner", component);
+}
+
+const plugin = {
+	install
 };
+
+let GlobalVue = null;
+if (typeof window !== "undefined") {
+	GlobalVue = window.Vue;
+} else if (typeof global !== "undefined") {
+	GlobalVue = global.vue;
+}
+
+if (GlobalVue) {
+	GlobalVue.use(plugin);
+}
+
+component.install = install;
+
+export default component;

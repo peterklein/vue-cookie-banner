@@ -1,21 +1,43 @@
 {
 	"name": "vue-cookie-banner",
-	"version": "1.2.1",
+	"version": "1.3.0",
 	"description": "",
-	"main": "./dist/index.js",
+	"author": "Peter Klein <hallo@peterkle.in>",
+	"license": "MIT",
+	"main": "dist/cookie-banner.umd.js",
+	"module": "dist/cookie-banner.esm.js",
+	"unpkg": "dist/cookie-banner.min.js",
+	"browser": {
+		"./sfc": "src/cookie-banner.vue"
+	},
 	"private": false,
 	"scripts": {
-		"dev": "vue serve CookieBanner.vue",
-		"build": "bili --name index --plugin vue --vue.css false"
+		"build": "npm run build:unpkg & npm run build:es & npm run build:umd",
+		"build:umd": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format umd --file dist/cookie-banner.umd.js",
+		"build:es": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format es --file dist/cookie-banner.esm.js",
+		"build:unpkg": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format iife --file dist/cookie-banner.min.js"
 	},
 	"files": [
-		"dist/*"
+		"dist/*",
+		"src/*",
+		"attributes.json",
+		"tags.json"
 	],
-	"author": "",
-	"license": "ISC",
+	"vetur": {
+		"tags": "tags.json",
+		"attributes": "attributes.json"
+	},
 	"devDependencies": {
 		"bili": "^4.8.1",
+		"cross-env": "^7.0.0",
+		"minimist": "^1.2.0",
+		"rollup": "^1.31.0",
+		"rollup-plugin-buble": "^0.19.8",
+		"rollup-plugin-commonjs": "^10.1.0",
+		"rollup-plugin-replace": "^2.2.0",
+		"rollup-plugin-uglify-es": "^0.0.1",
 		"rollup-plugin-vue": "^5.1.6",
+		"vue": "^2.6.11",
 		"vue-template-compiler": "^2.6.11"
 	}
 }
