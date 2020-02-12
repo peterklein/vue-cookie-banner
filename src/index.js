@@ -1,26 +1,21 @@
-import component from './cookie-banner.vue';
+import CookieBanner from './vue-cookie-consent.vue';
 
-function install(Vue) {
-	if (install.installed) return;
-	install.installed = true;
-	Vue.component("CookieBanner", component);
+function install(Vue, options = {}) {
+	if (this.installed) return;
+	this.installed = true;
+
+	Vue.prototype.$banner = {
+		close() {
+			console.log('close banner');
+			
+		}
+	}
+
+	Vue.component('CookieBanner', CookieBanner);
 }
 
-const plugin = {
+const Plugin = {
 	install
 };
 
-let GlobalVue = null;
-if (typeof window !== "undefined") {
-	GlobalVue = window.Vue;
-} else if (typeof global !== "undefined") {
-	GlobalVue = global.vue;
-}
-
-if (GlobalVue) {
-	GlobalVue.use(plugin);
-}
-
-component.install = install;
-
-export default component;
+export default Plugin;
