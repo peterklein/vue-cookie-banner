@@ -17,16 +17,18 @@
             <button @click.prevent="closeBanner" class="Cookie__Banner-button">Allow Cookies</button>
         </div>
     </div>
+
 </template>
 
 <script>
 export default {
-    name: 'cookie-banner',
+	name: 'cookie-banner',
 
-    data() {
-        return {
-            localStorageAllowed: true,
+	data() {
+		return {
+			localStorageAllowed: true,
 			cookiesAccepted: false,
+
         };
     },
 
@@ -82,10 +84,11 @@ export default {
     },
 
     created() {
+
 		if (!!this.getPageVisited() === true) {
 			this.cookiesAccepted = true;
 		}
-    },
+	},
 
     computed: {
         cookieBannerType() {
@@ -96,65 +99,71 @@ export default {
             return `Cookie__Banner-${this.position}`;
         },
 
-        cookieBannerTheme() {
-            return `Cookie__Banner-${this.theme}`;
-        },
-    },
 
-    methods: {
-        closeBanner() {
+		cookieBannerTheme() {
+			return `Cookie__Banner-${this.theme}`;
+		},
+	},
+
+	methods: {
+		closeBanner() {
 			this.setPageVisited();
 			this.cookiesAccepted = true;
-        },
+		},
 
 		setPageVisited() {
 			if (this.localStorageAllowed) {
-				return localStorage.setItem('cookiesAccepted', true)
+				return localStorage.setItem('cookiesAccepted', true);
 			}
 		},
 
 		getPageVisited() {
 			if (this.localStorageAllowed) {
-				return localStorage.getItem('cookiesAccepted'); 
+				return localStorage.getItem('cookiesAccepted');
 			}
 		},
 
 		discard() {},
-
-    },
+	},
 };
 </script>
 
 <style lang="scss" scoped>
 .Cookie__Banner {
-    --font-size: 18px;
-    --main-color: #237afc;
+	--font-size: 18px;
+	--main-color: #237afc;
+	--white: #ffffff;
 
-    background: var(--main-color);
-    color: #fff;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 20px;
-    font-size: var(--font-size);
-    font-family: inherit;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
+	background: var(--main-color);
+	color: var(--white);
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	padding: 20px;
+	font-size: var(--font-size);
+	font-family: inherit;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 10000;
+
+	&-headline {
+		color: var(--white);
+	}
 
 	&-content {
 		display: flex;
 		flex-direction: column;
 	}
 
-    &-button {
-        background-color: #fff;
-        color: #237afc;
-        cursor: pointer;
-        border: 0;
-        padding: 20px;
-        font-size: var(--font-size);
-    }
+	&-button {
+		background-color: #fff;
+		color: #237afc;
+		cursor: pointer;
+		border: 0;
+		padding: 20px;
+		font-size: var(--font-size);
+	}
 }
 </style>
