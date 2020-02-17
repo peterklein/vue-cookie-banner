@@ -1,7 +1,7 @@
 <template>
     <div
         class="Cookie__Banner"
-        :class="[cookieBannerPosition, cookieBannerTheme]"
+        :class="[cookieBannerType, cookieBannerPosition, cookieBannerTheme]"
         v-if="!cookiesAccepted"
     >
         <div class="Cookie__Banner-content">
@@ -36,6 +36,12 @@ export default {
             required: false,
             default: 'dark',
         },
+
+		type: {
+			type: String,
+			required: false,
+			default: 'box'
+		},
 
         position: {
             type: String,
@@ -82,7 +88,11 @@ export default {
     },
 
     computed: {
-        cookieBannerPosition() {
+        cookieBannerType() {
+            return `Cookie__Banner-${this.type}`;
+        },
+
+		cookieBannerPosition() {
             return `Cookie__Banner-${this.position}`;
         },
 
