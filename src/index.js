@@ -1,4 +1,5 @@
 import CookieBanner from './vue-cookie-consent.vue';
+import VueCookies from 'vue-cookies';
 
 function install(Vue, options = {}) {
 	if (this.installed) return;
@@ -7,15 +8,14 @@ function install(Vue, options = {}) {
 	Vue.prototype.$banner = {
 		close() {
 			console.log('close banner');
-			
-		}
-	}
+		},
+	};
 
 	Vue.component('CookieBanner', CookieBanner);
 }
 
 const Plugin = {
-	install
+	install,
 };
 
 export default Plugin;

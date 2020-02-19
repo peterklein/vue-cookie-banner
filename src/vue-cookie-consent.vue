@@ -1,26 +1,34 @@
 <template>
-    <div
-        class="Cookie__Banner"
-        :class="[cookieBannerType, cookieBannerPosition, cookieBannerTheme]"
-        v-if="!cookiesAccepted"
-    >
-        <div class="Cookie__Banner-content">
-            <h3 v-if="bannerHeadline">{{ bannerHeadline }}</h3>
-            <p>
-                {{ bannerMessage }}
-                <a href v-if="target">Learn more</a>
-            </p>
-        </div>
+	<div
+		class="Cookie__Banner"
+		:class="[cookieBannerType, cookieBannerPosition, cookieBannerTheme]"
+		v-if="!cookiesAccepted"
+	>
+		<div class="Cookie__Banner-content">
+			<h3 v-if="bannerHeadline">{{ bannerHeadline }}</h3>
+			<p>
+				{{ bannerMessage }}
+				<a href v-if="target">Learn more</a>
+			</p>
+		</div>
 
-        <div class="Cookie__Banner-actions">
-			<button @click.prevent="discard" class="Cookie__Banner-button">Discard</button>
-            <button @click.prevent="closeBanner" class="Cookie__Banner-button">Allow Cookies</button>
-        </div>
-    </div>
-
+		<div class="Cookie__Banner-actions">
+			<button @click.prevent="discard" class="Cookie__Banner-button">
+				Discard
+			</button>
+			<button @click.prevent="closeBanner" class="Cookie__Banner-button">
+				Allow Cookies
+			</button>
+		</div>
+	</div>
 </template>
 
 <script>
+const STORAGE = {
+	localStorage: 'localStorage',
+	cookies: 'cookies',
+};
+
 export default {
 	name: 'cookie-banner',
 
@@ -28,77 +36,94 @@ export default {
 		return {
 			localStorageAllowed: true,
 			cookiesAccepted: false,
+		};
+	},
 
-        };
-    },
-
-    props: {
-        theme: {
-            type: String,
-            required: false,
-            default: 'dark',
-        },
+	props: {
+		theme: {
+			type: String,
+			required: false,
+			default: 'dark',
+		},
 
 		type: {
 			type: String,
 			required: false,
-			default: 'box'
+			default: 'box',
 		},
 
-        position: {
-            type: String,
-            required: false,
-            default: 'bottom',
-        },
+		storageType: {
+			type: String,
+			required: true,
+			default: STORAGE.localStorage,
+		},
 
-        bannerHeadline: {
-            type: String,
-            required: false,
-            default: 'This is the ultimate vue cookie banner',
-        },
+		position: {
+			type: String,
+			required: false,
+			default: 'bottom',
+		},
 
-        bannerMessage: {
-            type: String,
-            required: false,
-            default:
-                'This website uses cookies to ensure you get the best experience on our website.',
-        },
+		bannerHeadline: {
+			type: String,
+			required: false,
+			default: 'This is the ultimate vue cookie banner',
+		},
 
-        cookieName: {
-            type: String,
-            required: false,
-            default: 'vue-cookie-banner',
-        },
+		bannerMessage: {
+			type: String,
+			required: false,
+			default:
+				'This website uses cookies to ensure you get the best experience on our website.',
+		},
 
-        pageOverlay: {
-            type: Boolean,
-            required: false,
-            default: false,
-        },
+		cookieName: {
+			type: String,
+			required: false,
+			default: 'vue-cookie-banner',
+		},
 
-        target: {
-            type: String,
-            required: false,
-            default: null,
-        },
-    },
+		pageOverlay: {
+			type: Boolean,
+			required: false,
+			default: false,
+		},
 
-    created() {
+		target: {
+			type: String,
+			required: false,
+			default: null,
+		},
+	},
+
+	created() {
+		if (this.storageType === STORAGE.localStorage) {
+			try {
+				const localStorageTest = 'vue-cookie-consent__test';
+
+				window.localStorage.setItem('test', localStorageTest);
+				window.localStorage.removeItem('test');
+				console.log('Test was successful. Local Storage can be used.');
+			} catch (error) {
+				console.warn(
+					'Localstorage is not supported. Cookies will be used.'
+				);
+			}
+		}
 
 		if (!!this.getPageVisited() === true) {
 			this.cookiesAccepted = true;
 		}
 	},
 
-    computed: {
-        cookieBannerType() {
-            return `Cookie__Banner-${this.type}`;
-        },
+	computed: {
+		cookieBannerType() {
+			return `Cookie__Banner-${this.type}`;
+		},
 
 		cookieBannerPosition() {
-            return `Cookie__Banner-${this.position}`;
-        },
-
+			return `Cookie__Banner-${this.position}`;
+		},
 
 		cookieBannerTheme() {
 			return `Cookie__Banner-${this.theme}`;
@@ -114,6 +139,8 @@ export default {
 		setPageVisited() {
 			if (this.localStorageAllowed) {
 				return localStorage.setItem('cookiesAccepted', true);
+			} else {
+				// return this.$cookie
 			}
 		},
 
