@@ -1,4 +1,4 @@
-[Cookie](https://image.flaticon.com/icons/svg/541/541732.svg)
+![Cookie](https://image.flaticon.com/icons/svg/541/541732.svg)
 
 
 # This is just a test
