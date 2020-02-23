@@ -1,11 +1,18 @@
-![](https://image.flaticon.com/icons/svg/541/541732.svg =80x)
+![](https://image.flaticon.com/icons/svg/541/541732.svg =60x)
 
-![](https://image.flaticon.com/icons/svg/446/446191.svg =80x)
+![](https://image.flaticon.com/icons/svg/446/446191.svg =60x)
 
 
-# This is just a test
+# Props
 
-## Please do not use it
+| Name | Type | Description | Default | Values |
+|------|-------------|---------|------|--------|
+| dark | Boolean | The Description | - | |
+| toast | Boolean | The Description | - | |
+| rounded | Boolean | Defines the border radius. | - | |
+| storageType | String | The Description | localStorage | `cookies`, `localStorage` |
+| bannerHeadline | String | The banner headline | This is the ultimate vue cookie banner |  |
+
 
 Logo credits
 
