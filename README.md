@@ -1,5 +1,6 @@
-![Cookie](https://image.flaticon.com/icons/svg/541/541732.svg =80x80)
-![Checkmark](https://image.flaticon.com/icons/svg/446/446191.svg =80x80)
+![](https://image.flaticon.com/icons/svg/541/541732.svg =80x)
+
+![](https://image.flaticon.com/icons/svg/446/446191.svg =80x)
 
 
 # This is just a test
