@@ -1,23 +1,36 @@
 <template>
 	<div
 		class="Cookie__Banner"
-		:class="[cookieBannerType, cookieBannerPosition, cookieBannerTheme]"
+		:class="[cookieBannerType, cookieBannerTheme]"
+		:style="[...cookieBannerStyle]"
 		v-if="!cookiesAccepted"
 	>
 		<div class="Cookie__Banner-content">
-			<h3 v-if="bannerHeadline">{{ bannerHeadline }}</h3>
-			<p>
-				{{ bannerMessage }}
-				<a href v-if="target">Learn more</a>
-			</p>
+			<template v-if="hasSlotData">
+				<slot />
+			</template>
+
+			<template v-else>
+				<h3 v-if="bannerHeadline">{{ bannerHeadline }}</h3>
+				<p>
+					{{ bannerMessage }}
+					<a href v-if="target">Learn more</a>
+				</p>
+			</template>
 		</div>
 
 		<div class="Cookie__Banner-actions">
-			<button @click.prevent="discard" class="Cookie__Banner-button">
-				Discard
+			<button
+				@click.prevent="discard"
+				:class="['Cookie__Banner-button', setButtonStyle]"
+			>
+				{{ buttonDiscardText }}
 			</button>
-			<button @click.prevent="closeBanner" class="Cookie__Banner-button">
-				Allow Cookies
+			<button
+				@click.prevent="accept"
+				:class="['Cookie__Banner-button', setButtonStyle]"
+			>
+				{{ buttonAcceptText }}
 			</button>
 		</div>
 	</div>
@@ -40,17 +53,11 @@ export default {
 	},
 
 	props: {
-		theme: {
-			type: String,
-			required: false,
-			default: 'dark',
-		},
+		dark: Boolean,
 
-		type: {
-			type: String,
-			required: false,
-			default: 'box',
-		},
+		toast: Boolean,
+
+		rounded: Boolean,
 
 		storageType: {
 			type: String,
@@ -59,9 +66,8 @@ export default {
 		},
 
 		position: {
-			type: String,
+			type: Object,
 			required: false,
-			default: 'bottom',
 		},
 
 		bannerHeadline: {
@@ -77,13 +83,25 @@ export default {
 				'This website uses cookies to ensure you get the best experience on our website.',
 		},
 
+		buttonDiscardText: {
+			type: String,
+			required: false,
+			default: 'Discard',
+		},
+
+		buttonAcceptText: {
+			type: String,
+			required: false,
+			default: 'Accept',
+		},
+
 		cookieName: {
 			type: String,
 			required: false,
 			default: 'vue-cookie-banner',
 		},
 
-		pageOverlay: {
+		/* pageOverlay: {
 			type: Boolean,
 			required: false,
 			default: false,
@@ -93,7 +111,7 @@ export default {
 			type: String,
 			required: false,
 			default: null,
-		},
+		}, */
 	},
 
 	created() {
@@ -109,6 +127,12 @@ export default {
 					'Localstorage is not supported. Cookies will be used.'
 				);
 			}
+		} else if (this.storageType === STORAGE.cookies) {
+			this.localStorageAllowed = false;
+		} else {
+			console.error(
+				"At least you have to define one option. Either 'localStorage' or 'cookies'"
+			);
 		}
 
 		if (!!this.getPageVisited() === true) {
@@ -118,20 +142,27 @@ export default {
 
 	computed: {
 		cookieBannerType() {
-			return `Cookie__Banner-${this.type}`;
-		},
-
-		cookieBannerPosition() {
-			return `Cookie__Banner-${this.position}`;
+			return this.toast ? `Cookie__Banner-toast` : null;
 		},
 
 		cookieBannerTheme() {
-			return `Cookie__Banner-${this.theme}`;
+			return this.dark ? `Cookie__Banner-dark` : null;
+		},
+
+		cookieBannerStyle() {
+			return {
+				'border-radius': this.rounded ? '0.5rem' : null,
+				...this.position,
+			};
+		},
+
+		setButtonStyle() {
+			return this.toast ? 'transparent' : null;
 		},
 	},
 
 	methods: {
-		closeBanner() {
+		accept() {
 			this.setPageVisited();
 			this.cookiesAccepted = true;
 		},
@@ -141,6 +172,7 @@ export default {
 				return localStorage.setItem('cookiesAccepted', true);
 			} else {
 				// return this.$cookie
+				console.log('set cookie comes here');
 			}
 		},
 
@@ -148,6 +180,10 @@ export default {
 			if (this.localStorageAllowed) {
 				return localStorage.getItem('cookiesAccepted');
 			}
+		},
+
+		hasSlotData() {
+			return !!this.$slots.default;
 		},
 
 		discard() {},
@@ -161,12 +197,15 @@ export default {
 	--main-color: #237afc;
 	--white: #ffffff;
 
+	--dark-theme-background: #272727;
+	--dark-theme-button-color: #bb86fc;
+
 	background: var(--main-color);
 	color: var(--white);
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-	padding: 20px;
+	padding: 14px 16px;
 	font-size: var(--font-size);
 	font-family: inherit;
 	position: fixed;
@@ -174,23 +213,51 @@ export default {
 	left: 0;
 	right: 0;
 	z-index: 10000;
+	font-family: Roboto, sans-serif;
 
-	&-headline {
+	&-toast {
+		margin: 8px;
+	}
+
+	&-dark {
+		background-color: var(--dark-theme-background);
 		color: var(--white);
+	}
+
+	h3 {
+		color: var(--white);
+		margin: 0;
 	}
 
 	&-content {
 		display: flex;
 		flex-direction: column;
+		justify-content: center;
+		color: var(--white);
+	}
+
+	&-actions {
+		display: flex;
+		justify-content: center;
 	}
 
 	&-button {
 		background-color: #fff;
-		color: #237afc;
+		color: var(--white);
 		cursor: pointer;
 		border: 0;
-		padding: 20px;
+		padding: 10px 20px;
 		font-size: var(--font-size);
+		margin: 0 0 0 10px;
+		text-transform: uppercase;
+
+		.Cookie__Banner-dark & {
+			color: var(--dark-theme-button-color);
+		}
+
+		&.transparent {
+			background-color: transparent;
+		}
 	}
 }
 </style>
