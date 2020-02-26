@@ -150,10 +150,9 @@ export default {
 		},
 
 		cookieBannerStyle() {
-			return {
+			return Oject.assign({}, {
 				'border-radius': this.rounded ? '0.5rem' : null,
-				...this.position,
-			};
+			}, ...this.position);
 		},
 
 		setButtonStyle() {

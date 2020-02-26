@@ -1,5 +1,4 @@
 import CookieBanner from './vue-cookie-consent.vue';
-import VueCookies from 'vue-cookies';
 
 function install(Vue, options = {}) {
 	if (this.installed) return;
