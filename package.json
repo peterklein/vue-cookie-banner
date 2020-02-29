@@ -1,6 +1,6 @@
 {
-	"name": "vue-cookie-consent",
-	"version": "0.0.15",
+	"name": "@piet/vue-cookie-consent",
+	"version": "0.0.17",
 	"description": "",
 	"author": "Peter Klein <hallo@peterkle.in>",
 	"license": "MIT",
