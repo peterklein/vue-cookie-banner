@@ -1,0 +1,37 @@
+.Cookie__Banner {
+	--font-size: 18px;
+	--main-color: #237afc;
+	--white: #ffffff;
+
+	background: var(--main-color);
+	color: var(--white);
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	padding: 20px;
+	font-size: var(--font-size);
+	font-family: inherit;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 10000;
+
+	&-headline {
+		color: var(--white);
+	}
+
+	&-content {
+		display: flex;
+		flex-direction: column;
+	}
+
+	&-button {
+		background-color: #fff;
+		color: #237afc;
+		cursor: pointer;
+		border: 0;
+		padding: 20px;
+		font-size: var(--font-size);
+	}
+}
