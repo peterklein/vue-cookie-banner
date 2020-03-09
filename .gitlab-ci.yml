@@ -1,0 +1,16 @@
+image: node:12-alpine
+
+stages:
+  - dev
+
+before_script:
+  #- npm set registry http://npm.peterkle.in
+  - npm i
+
+publish:
+  stage: dev
+  script:
+    - npm cache clean --force
+    - npm config set //npm.peterkle.in/:_authToken qHfDBP2cbR1ABKK9T9CTyokoAEC60z40xaqHY1HSV50=
+    - npm build
+    - npm publish --verbose
